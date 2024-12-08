@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Navbar from "../shared/navbar";
 import Footer from "../shared/footer";
 
+import getIsLoggedIn from "@/app/utils/getIsLoggedIn";
+
 
 export default function Account() {
   const [userEmail, setUserEmail] = useState(null); // E-Mail des Benutzers
@@ -31,9 +33,20 @@ export default function Account() {
     }
   };
 
-  // Benutzerdaten beim Laden der Seite abrufen
   useEffect(() => {
-    fetchUserEmail();
+    fetchUserEmail(); // Benutzerdaten laden
+    const fetchData = async () => {
+      getIsLoggedIn().then((data) => {
+        const error = data.error;
+        error
+          ? console.log(error)
+          : console.log("Successfully fetched user login status");
+        if (!data.loggedIn) {
+          window.location.href = "/";
+        }
+      });
+    };
+    fetchData();
   }, []);
 
   const logout = async () => {

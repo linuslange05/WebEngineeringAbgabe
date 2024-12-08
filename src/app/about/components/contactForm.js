@@ -50,7 +50,7 @@ export default function ContactForm() {
 
   return (
     <div className="max-w-md w-full bg-white p-6 rounded-lg shadow-lg text-left">
-      <h3 className="text-lg font-semibold mb-4 text-gray-800">Contact Us</h3>
+      <h3 className="text-lg font-semibold mb-4 text-gray-800">Contact</h3>
 
       <form onSubmit={handleSubmit}>
         <label className="block mb-2 text-gray-600 font-medium">
@@ -91,7 +91,7 @@ export default function ContactForm() {
           type="submit"
           className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
         >
-          Send Feedback
+          git push
         </button>
       </form>
     </div>

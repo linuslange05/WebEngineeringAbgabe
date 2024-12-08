@@ -9,7 +9,7 @@ router.get('/', authMiddleware, (req, res) => {
   
     // Alle Locations des Benutzers abfragen
     db.all(
-      `SELECT locations.id, locations.name
+      `SELECT locations.id, locations.name, locations.latitude, locations.longitude
        FROM locations
        JOIN user_locations ON locations.id = user_locations.location_id
        WHERE user_locations.user_id = ?`,

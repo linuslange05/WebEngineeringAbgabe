@@ -19,3 +19,192 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* Allgemeine Hintergrundstile */
+.bg-rain {
+  background: linear-gradient(to bottom, #4a90e2, #357ab8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.bg-snow {
+  background: linear-gradient(to bottom, #e0e4f1, #aab4d8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Bewölkter Hintergrund */
+.bg-cloudy {
+  background: linear-gradient(to bottom, #d3d3d3, #a9a9a9);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Wolken */
+.bg-cloudy .cloud {
+  position: absolute;
+  font-size: 32px; /* Größe der Wolken */
+  color: rgba(255, 255, 255, 0.9);
+  left: calc(100% * var(--random-x)); /* Zufällige horizontale Position */
+  top: calc(
+    50vh * var(--random-y)
+  ); /* Zufällige vertikale Position (oberer Bereich) */
+}
+
+/* Regentropfen */
+.bg-rain .rain-drop {
+  position: absolute;
+  top: -50px;
+  font-size: 24px; /* Größe der Regentropfen */
+  color: rgba(255, 255, 255, 0.8);
+  animation: rain-drop 1.5s linear infinite;
+  left: calc(100% * var(--random-x)); /* Zufällige horizontale Position */
+  animation-delay: var(--random-delay); /* Zufällige Verzögerung */
+}
+
+/* Schneeflocken */
+.bg-snow .snowflake {
+  position: absolute;
+  top: -50px;
+  font-size: 24px; /* Größe der Schneeflocken */
+  color: rgba(255, 255, 255, 0.9);
+  animation: snow-fall 3s linear infinite;
+  left: calc(100% * var(--random-x)); /* Zufällige horizontale Position */
+  animation-delay: var(--random-delay); /* Zufällige Verzögerung */
+}
+
+/* Sonniger Hintergrund */
+.bg-sunny {
+  background: linear-gradient(to bottom, #fefcea, #f1da36);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Sonne */
+.bg-sunny .sun {
+  position: absolute;
+  top: 10%; /* Oben */
+  right: 15%; /* Mittig rechts */
+  font-size: 80px; /* Größe der Sonne */
+  color: #ffdd33; /* Sonnige Farbe */
+  animation: sun-glow 3s ease-in-out infinite; /* Leichte Glüh-Animation */
+}
+
+/* Animation für Regentropfen */
+@keyframes rain-drop {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* Animation für Schneeflocken */
+@keyframes snow-fall {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg) scale(0.8);
+  }
+}
+
+/* Animation für Sonnenstrahlen */
+@keyframes sun-glow {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+}
+
+/* Gewitter Hintergrund */
+.bg-thunderstorm {
+  background: linear-gradient(to bottom, #2c3e50, #4c5c6b);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Blitze */
+.bg-thunderstorm .lightning {
+  position: absolute;
+  top: calc(100% * var(--random-y)); /* Zufällige vertikale Position */
+  left: calc(100% * var(--random-x)); /* Zufällige horizontale Position */
+  font-size: 40px; /* Größe der Blitze */
+  color: #ffffff; /* Blitzfarbe */
+  opacity: 0; /* Unsichtbar, bis Animation startet */
+  animation: lightning-flash 4s infinite;
+  animation-delay: var(--random-delay); /* Zufällige Verzögerung */
+}
+
+/* Animation für Blitz */
+@keyframes lightning-flash {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  10% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Default Layout (Portrait-Modus) - 5 Kacheln untereinander */
+.weather-card {
+  flex-basis: 100%; /* Default für mobile Geräte */
+  max-width: 100%;
+}
+
+/* iPhone 6 Landscape (und ähnliche Geräte zwischen 480px und 767px) - 3 Kacheln pro Reihe */
+@media (min-width: 480px) and (max-width: 767px) {
+  .weather-card {
+    flex-basis: calc(33.33% - 16px); /* 3 Kacheln pro Reihe */
+    max-width: calc(33.33% - 16px); /* Sicherstellen, dass 3 Kacheln nebeneinander passen */
+  }
+}
+
+/* Größere Bildschirme (ab 768px) - 5 Kacheln pro Reihe */
+@media (min-width: 768px) {
+  .weather-card {
+    flex-basis: calc(20% - 16px); /* 5 Kacheln pro Reihe */
+    max-width: calc(20% - 16px); /* Sicherstellen, dass 5 Kacheln nebeneinander passen */
+  }
+}
+

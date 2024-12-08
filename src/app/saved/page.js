@@ -4,11 +4,31 @@ import { useState, useEffect } from "react";
 import Navbar from "../shared/navbar";
 import Footer from "../shared/footer";
 
+import {useRouter} from "next/navigation";
+
+import getIsLoggedIn from "@/app/utils/getIsLoggedIn";
 
 export default function Saved() {
+  const router = useRouter();
+
   const [savedLocations, setSavedLocations] = useState([]);
-  const [weather, setWeather] = useState(null);
+  // const [weather, setWeather] = useState(null);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      getIsLoggedIn().then((data) => {
+        const error = data.error;
+        error
+          ? console.log(error)
+          : console.log("Successfully fetched user login status");
+        if (!data.loggedIn) {
+          window.location.href = "/";
+        }
+      });
+    };
+    fetchData();
+  }, []);
 
   // Fetch saved locations from the backend
   const fetchSavedLocations = async () => {
@@ -19,11 +39,9 @@ export default function Saved() {
       const data = await response.json();
       if (response.ok) {
         const locations = [];
-        // data.locations.forEach(entry => {
-        //     locations.push(entry.name);
-        // });
         data.forEach(entry => {
-            locations.push(entry.name);
+            // locations.push(entry.name);
+            locations.push(entry);
             
         });
         setSavedLocations(locations);
@@ -37,39 +55,40 @@ export default function Saved() {
   };
 
   // Fetch weather for a specific location
-  const fetchWeatherForLocation = async (location) => {
-    try {
-      const response = await fetch(`/api/weather?location=${location}`);
-      const data = await response.json();
-      if (data.cod === 200) {
-        setWeather({ ...data, name: location });
-        setError(null);
-      } else {
-        setError(data.message);
-        setWeather(null);
-      }
-    } catch (err) {
-      setError("Failed to fetch weather data.");
-      setWeather(null);
-    }
-  };
+  // const fetchWeatherForLocation = async (location) => {
+  //   try {
+  //     const response = await fetch(`/api/weather?location=${location}`);
+  //     const data = await response.json();
+  //     if (data.cod === 200) {
+  //       setWeather({ ...data, name: location });
+  //       setError(null);
+  //     } else {
+  //       setError(data.message);
+  //       setWeather(null);
+  //     }
+  //   } catch (err) {
+  //     setError("Failed to fetch weather data.");
+  //     setWeather(null);
+  //   }
+  // };
 
   // Remove a location from saved list
   const removeLocation = async (location) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/locations/remove`, {
         method: "DELETE",
-        body: JSON.stringify({ name: location }),
+        body: JSON.stringify({ name: location.name }),
         headers: {
           "Content-Type": "application/json",
         },
         credentials: "include",
       });
       if (response.ok) {
-        setSavedLocations(savedLocations.filter((loc) => loc !== location));
-        if (weather && weather.name === location) {
-          setWeather(null);
-        }
+        // setSavedLocations(savedLocations.filter((loc) => loc !== location));
+        setSavedLocations(savedLocations.filter((loc) => loc.name !== location.name));
+        // if (weather && weather.name === location) {
+        //   setWeather(null);
+        // }
       } else {
         setError("Failed to delete location.");
       }
@@ -77,6 +96,15 @@ export default function Saved() {
       setError("Failed to delete location.");
     }
   };
+
+  const showLocationInSearch = (location) => {
+    // console.log(location);
+    // console.log(location.latitude);
+    // console.log(location.longitude);
+    // console.log(`/search?latitude=${encodeURIComponent(location.latitude)}&longitude=${encodeURIComponent(location.longitude)}&name=${encodeURIComponent(location.name)}`);
+    router.push(`/search?latitude=${encodeURIComponent(location.latitude)}&longitude=${encodeURIComponent(location.longitude)}&name=${encodeURIComponent(location.name)}`);
+  };
+
 
   useEffect(() => {
     fetchSavedLocations();
@@ -92,11 +120,12 @@ export default function Saved() {
           {savedLocations.length === 0 && <p>No saved locations found.</p>}
           <ul>
             {savedLocations.map((location) => (
-              <li key={location} className="flex justify-between items-center mb-2">
-                <span className="text-lg">{location}</span>
+              <li key={location.id} className="flex justify-between items-center mb-2">
+                <span className="text-lg">{location.name}</span>
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => fetchWeatherForLocation(location)}
+                    // onClick={() => fetchWeatherForLocation(location)}
+                    onClick={() => showLocationInSearch(location)}
                     className="text-blue-500 hover:underline"
                   >
                     Show Weather
@@ -111,13 +140,13 @@ export default function Saved() {
               </li>
             ))}
           </ul>
-          {weather && (
+          {/* {weather && (
             <div className="mt-6">
               <h2 className="text-xl font-semibold">{weather.name}</h2>
               <p className="text-lg">{weather.main.temp}°C</p>
               <p className="text-sm text-gray-500">{weather.weather[0].description}</p>
             </div>
-          )}
+          )} */}
         </div>
       </div>
       <Footer/>

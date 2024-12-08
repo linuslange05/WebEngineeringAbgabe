@@ -5,7 +5,7 @@ const authMiddleware = require('../../middleware/auth'); // Authentifizierungs-M
 const router = express.Router();
 
 router.post('/', authMiddleware, (req, res) => {
-    const { name } = req.body;
+    const { name, latitude, longitude } = req.body;
     const userId = req.userId; // userId vom authMiddleware erhalten
   
     // Überprüfen, ob die Location bereits in der locations-Tabelle existiert
@@ -28,8 +28,8 @@ router.post('/', authMiddleware, (req, res) => {
         } else {
           // Wenn die Location nicht existiert, füge sie in die locations-Tabelle ein und dann zur user_locations
           db.run(
-            `INSERT INTO locations (name) VALUES (?)`,
-            [name],
+            `INSERT INTO locations (name, latitude, longitude) VALUES (?, ?, ?)`,
+            [name, latitude, longitude],
             function (err) {
               if (err) return res.status(500).json({ error: 'Fehler beim Hinzufügen der Location' });
   

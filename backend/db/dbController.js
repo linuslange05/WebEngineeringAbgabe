@@ -45,7 +45,9 @@ db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS locations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT
+      name TEXT,
+      latitude REAL,
+      longitude REAL
     )
   `);
 });

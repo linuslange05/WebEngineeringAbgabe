@@ -9,11 +9,15 @@ export default function WikiSearch() {
 
   const searchWikipedia = async () => {
     setError(null);  // Clear previous errors
+    if(query.trim() === "") {
+      setError("Please enter a search term.");
+      return;
+    }
     try {
       const response = await fetch(`https://de.wikipedia.org/w/api.php?action=query&list=search&srsearch=${query}&format=json&origin=*`);
       const data = await response.json();
-
-      if (data?.query?.search) {
+      console.log(data);
+      if (data?.query?.search && data.query.search.length > 0) {
         setResults(data.query.search);
       } else {
         setError("No results found.");
